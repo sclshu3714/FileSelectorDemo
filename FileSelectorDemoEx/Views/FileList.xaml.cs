@@ -23,6 +23,13 @@ namespace FileSelectorDemo.Views
         public FileList()
         {
             InitializeComponent();
+            fileList.PreviewMouseWheel += (sender, e) =>
+            {
+                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+                eventArg.RoutedEvent = UIElement.MouseWheelEvent;
+                eventArg.Source = sender;
+                fileList.RaiseEvent(eventArg);
+            };
         }
     }
 }

@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:FileSelectorDemo"
         xmlns:views="clr-namespace:FileSelectorDemo.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow"
+        Height="350"
+        Width="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -27,6 +29,20 @@
         </DockPanel>
         <views:FileList x:Name="FileList"
                         Grid.Row="2"
-                        DataContext="{Binding FileListViewModelInstance}" />
+                        DataContext="{Binding FileListViewModelInstance}" 
+                        Margin="0 0 0 20"/>
+        <TextBlock Margin="3 3 3 3"
+                   Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   Panel.ZIndex="2">
+                        <Run Text="   "></Run>
+                        <Run Text="{Binding FileListViewModelInstance.CurrentFileList.Count,Mode=OneWay}"></Run>
+                        <Run> 个项目</Run>
+                        <Run Text="   选中 " /> 
+                        <Run Text="{Binding FileListViewModelInstance.CurrentFileList,Converter={StaticResource CollectionSelectedCountConverter},Mode=OneWay}"></Run>
+                        <Run Text=" 个项目   " />
+                        <Run Text="{Binding FileListViewModelInstance.CurrentFileList,Converter={StaticResource CollectionSelectedSizeConverter},Mode=OneWay}"></Run>
+        </TextBlock>
     </Grid>
 </Window>

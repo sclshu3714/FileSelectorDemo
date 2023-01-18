@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FileSelectorDemo.Models;
+using FileSelectorDemo.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,6 +57,11 @@ namespace FileSelectorDemo.Views
             if (e.OriginalSource is Border border && border.Name == "outer" && 
                 border.TemplatedParent is ItemsControl control && control.FindName("toggleBtnFolder") is ToggleButton toggle) {
                 toggle.IsChecked = true;
+                if (control.TemplatedParent is CheckBox checkBox && checkBox.Template.FindName("currentdirectory", checkBox) is TextBox txtBox)
+                {
+                    if(txtBox.Text != null)
+                    txtBox.Select(txtBox.Text.Length, 0);
+                }
             }
         }
 
@@ -65,11 +72,58 @@ namespace FileSelectorDemo.Views
         /// <param name="e"></param>
         private void OnEndEditPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.OriginalSource is TextBox txtBox && txtBox.TemplatedParent is CheckBox checkBox && 
-                checkBox.Template.LoadContent() is Border border && border.Name == "border" && border.FindName("bcvItemsControl") is ItemsControl control && control.FindName("toggleBtnFolder") is ToggleButton toggle)
+            if (e.Key == Key.Enter && e.OriginalSource is TextBox txtBox && txtBox.TemplatedParent is CheckBox checkBox && checkBox.Template.FindName("toggleBtnFolder", checkBox) is ToggleButton toggle)
             {
                 toggle.IsChecked = false;
-                this.UpdateLayout();
+                System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(txtBox.Text);// System.IO.Directory.GetParent(directory);
+                FileListViewModel fileListViewModel = AttachedDataContext as FileListViewModel;
+                if ((directoryInfo.Name == "此电脑" || directoryInfo.Name == "我的电脑") ||
+                    fileListViewModel.CurrentModel.CurrentDirectory.Equals(txtBox.Text))
+                {
+                    return;
+                }
+
+                Models.FileListItemModel tempModel = new Models.FileListItemModel()
+                {
+                    Name = directoryInfo.Name,
+                    CreateTime = directoryInfo.CreationTime.ToString(),
+                    Size = " ",
+                    CurrentType = Defines.CurrentType.文件夹,
+                    CurrentDirectory = directoryInfo.FullName,
+                    Icon = Utils.DirectoryUtil.GetDefaultFolderIcon(),
+                    FileExtension = ".",
+                    ParentDirectory = directoryInfo.Parent.FullName
+                };
+                fileListViewModel.OpenCurrentDirectory.Execute(tempModel);
+            }
+        }
+
+
+        private void OnTextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (e.OriginalSource is TextBox txtBox && txtBox.TemplatedParent is CheckBox checkBox && checkBox.Template.FindName("toggleBtnFolder", checkBox) is ToggleButton toggle)
+            {
+                toggle.IsChecked = false;
+                System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(txtBox.Text);// System.IO.Directory.GetParent(directory);
+                FileListViewModel fileListViewModel = AttachedDataContext as FileListViewModel;
+                if ((directoryInfo.Name == "此电脑" || directoryInfo.Name == "我的电脑") ||
+                    fileListViewModel.CurrentModel.CurrentDirectory.Equals(txtBox.Text))
+                {
+                    return;
+                }
+
+                Models.FileListItemModel tempModel = new Models.FileListItemModel()
+                {
+                    Name = directoryInfo.Name,
+                    CreateTime = directoryInfo.CreationTime.ToString(),
+                    Size = " ",
+                    CurrentType = Defines.CurrentType.文件夹,
+                    CurrentDirectory = directoryInfo.FullName,
+                    Icon = Utils.DirectoryUtil.GetDefaultFolderIcon(),
+                    FileExtension = ".",
+                    ParentDirectory = directoryInfo.Parent.FullName
+                };
+                fileListViewModel.OpenCurrentDirectory.Execute(tempModel);
             }
         }
     }

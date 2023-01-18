@@ -285,13 +285,13 @@
                                 </ItemsControl>
                                 <TextBox x:Name="currentdirectory"
                                          BorderThickness="0"
-                                         Visibility="{Binding IsChecked,ElementName=toggleBtnFolder,Converter={StaticResource BoolToVisibilityConverter}}"
+                                         Visibility="{Binding IsChecked,ElementName=toggleBtnFolder,Mode=TwoWay,Converter={StaticResource BoolToVisibilityConverter}}"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Center"
                                          Text="{Binding FileListViewModelInstance.CurrentModel.CurrentDirectory}"
-                                         PreviewKeyDown="OnEndEditPreviewKeyDown">
-                                    
-                                </TextBox>
+                                         PreviewKeyDown="OnEndEditPreviewKeyDown"
+                                         LostFocus="OnTextBoxLostFocus"/>
+
                             </Grid>
                         </Grid>
                     </Border>

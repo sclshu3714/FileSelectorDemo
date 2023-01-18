@@ -17,9 +17,22 @@
     </UserControl.Resources>
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                      VerticalScrollBarVisibility="Auto">
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
             <Grid>
-                <StackPanel Orientation="Vertical">
+                <!--<TextBlock Margin="3 10 3 3"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Top"
+                           Panel.ZIndex="2">
+                        <Run>总共 </Run>
+                        <Run Text="{Binding CurrentFileList.Count,Mode=OneWay}"></Run>
+                        <Run> 个项目</Run>
+                        <Run>(已选中 </Run>
+                        <Run Text="{Binding CurrentFileList,Converter={StaticResource CollectionSelectedCountConverter},Mode=OneWay}"></Run>
+                        <Run> 个项目)</Run>
+                </TextBlock>-->
+                <WrapPanel Orientation="Vertical">
                     <DataGrid x:Name="fileList"
                               Style="{StaticResource DefaultDataGrid}"
                               HorizontalAlignment="Stretch"
@@ -90,21 +103,12 @@
                                                 Binding="{Binding Size}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <TextBlock Margin="2 5"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center">
-                        <Run>总共 </Run>
-                        <Run Text="{Binding CurrentFileList.Count,Mode=OneWay}"></Run>
-                        <Run> 个项目</Run>
-                        <Run>(已选中 </Run>
-                        <Run Text="{Binding CurrentFileList,Converter={StaticResource CollectionSelectedCountConverter},Mode=OneWay}"></Run>
-                        <Run> 个项目)</Run>
-                    </TextBlock>
-                </StackPanel>
+                </WrapPanel>
                 <TextBlock Text="该文件为空"
                            Visibility="{Binding CurrentFileList.Count,Converter={StaticResource CountToVisibilityConverter}}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"></TextBlock>
+                
             </Grid>
         </ScrollViewer>
     </Grid>
